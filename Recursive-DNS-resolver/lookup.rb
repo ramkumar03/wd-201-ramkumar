@@ -37,25 +37,9 @@ def parse_dns(dns_raw)
 end
 
 #########################################################
-=begin
 
-def resolve(dns_records, lookup_chain, domain)
-  record = dns_records[domain]
-  if (!record)
-    lookup_chain[0] = "Error: Record not found for " + domain
-    return lookup_chain
-  elsif record[:type] == "CNAME"
-    lookup_chain << record[:target]
-    return resolve(dns_records, lookup_chain, record[:target])
-  elsif record[:type] == "A"
-    return lookup_chain << record[:target]
-  else
-    lookup_chain << "Invalid record type for " + domain
-    return
-  end
-end
-
-=end
+#the resolve function is used to check with the domain name and the target recursively
+# until it finds the A type target with IP address
 
 def resolve(dns_records, lookup_chain, domain)
   record = dns_records[domain]
