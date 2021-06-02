@@ -20,20 +20,18 @@ dns_raw = File.readlines("zone")
 
 #the parse_dns function uses the raw data from zone file to create a record collection
 def parse_dns(dns_raw)
-  data = []
-
-  dns_raw.each { |line|
-    if (!(line == "\n" || line[0] == "#"))
-      data.push(line.split(", "))
-    end
-  }
-  records = {}
-
-  data.each { |item|
-    records[item[1]] = { type: item[0], target: item[2].chomp }
-  }
-
-  return records
+  dns_raw.
+    reject { |line| line.empty? || line[0] == "#" }.
+    map { |line| line.strip.split(", ") }.
+    reject do |record|
+    record.length < 3
+  end
+    .each_with_object({}) do |record, records|
+    records[record[1]] = {
+      type: record[0],
+      target: record[2],
+    }
+  end
 end
 
 #########################################################
